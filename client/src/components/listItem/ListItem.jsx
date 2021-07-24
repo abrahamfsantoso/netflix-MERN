@@ -14,6 +14,8 @@ export default function ListItem({ index, item }) {
   const [movie, setMovie] = useState({});
 
   useEffect(() => {
+    let unmounted = false;
+
     const getMovie = async () => {
       try {
         const res = await axios.get('/movies/find/' + item, {
@@ -22,19 +24,24 @@ export default function ListItem({ index, item }) {
               'Bearer ' + JSON.parse(localStorage.getItem('user')).accessToken,
           },
         });
-        setMovie(res.data);
+        if (!unmounted) {
+          setMovie(res.data);
+        }
       } catch (err) {
         console.log(err);
       }
     };
     getMovie();
+    return function () {
+      unmounted = true;
+    };
   }, [item]);
 
   return (
     <Link to={{ pathname: '/watch', movie: movie }}>
       <div
         className='listItem'
-        style={{ left: isHovered && index * 225 - 50 + index * 2.5 }}
+        style={{ left: isHovered && `${index * 225 - 50 + index * 2.5}` }}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >

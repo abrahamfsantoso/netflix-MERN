@@ -10,6 +10,7 @@ export default function List({ list }) {
   const [isMoved, setIsMoved] = useState(false);
   const [slideNumber, setSlideNumber] = useState(0);
   const [clickLimit, setClickLimit] = useState(window.innerWidth / 230);
+  console.log(window.innerWidth);
 
   const listRef = useRef();
 
@@ -36,7 +37,7 @@ export default function List({ list }) {
         />
         <div className='container' ref={listRef}>
           {list.content.map((item, i) => (
-            <ListItem index={i} item={item} />
+            <ListItem key={i} item={item} />
           ))}
         </div>
         <ArrowForwardIosOutlined
